@@ -382,11 +382,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotsParent: {fileID: 114483507}
   itemsParent: {fileID: 499933787}
-  gridSize: {x: 32, y: 32}
   slot: {fileID: 9218070464945030500, guid: 8353575c0add317439d0a385e3d1c3c1, type: 3}
   inventory: {fileID: 740783616}
+  slotHolder: {fileID: 0}
   itemSketch: {fileID: 8557769207641291502, guid: d914eaf325d904f49bcf732a4d0d6622,
     type: 3}
+  specialSlots: []
 --- !u!114 &571023444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -399,7 +400,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c36bfdde46be8a846957d318221afb7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 740783616}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
