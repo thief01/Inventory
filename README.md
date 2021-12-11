@@ -1,12 +1,12 @@
 # Inventory
 
+It is inventory stylized like sacred or commandos games. Here you can see how it is working. Under gifs is small description about inventory and use.
+
 <img src="https://i.imgur.com/EAlMbE9.gif"> 
 
 <img src="https://i.imgur.com/nTYZlVv.gif"> 
 
 <img src="https://i.imgur.com/wuTkSM9.gif"> 
-
-It is inventory stylized like sacred or commandos games.
 
 ## Operation of inventory <a name="Operation of inventory"></a>
 
