@@ -1,4 +1,20 @@
-# thief01-s-UNITY-assets
+# Inventory
 
-This is a repo of my private property that I want to share with other people. This is also my portfolio, here I try to write clean code and destroy all bugs. I will not use half measures.
-Anyway, if you want to use these resources because you saw it on my official yt channel: "https://www.youtube.com/channel/UCYJwgGbqwOkF_4fIEt9y8eA" and you thought hey cool, I want it. So if you don't know how to code, find other resources as there may be bugs. 
+It is inventory stylized like sacred or commandos games.
+
+## Operation of inventory <a name="Operation of inventory"></a>
+
+Inventory is holding your items which you can move them to slots(class SlotHolder), also you can move to another inventory.
+If you want more than 2 inventories at one screen and keep operation between them you have to do change in "InventoryUIController" in fucntion open(Inventory, Inventory); you have to add one more var type of inventory, and you have to close him in Close(); function
+
+<img src="https://imgur.com/a/jQjnlMr"> 
+
+## SlotHolder <a name="Slots Holder"></a>
+
+SlotsHolder is holding your special slots like for sword/gun/armor etc. everything what you need is change Enum in file "Item.cs", there you have to define your types of items.
+
+## Prefabs/Using <a name="Slots Holder"></a>
+
+After your changes you need to attach Inventory.cs and SlotHolder.cs to the object and define size of inventory and count of slots also their types.
+At the first run/show inventory, scripts will generate your inventory/normal slots, but special slots you have to do with yourself.
+And use my prefabs edit them for yourself.
