@@ -29,17 +29,29 @@ namespace Inventory
 
         public ItemType itemType;
 
-        public static Item Copy(Item i)
+        public bool Drop(Transform parrent)
+        {
+            if(pickup!=null)
+            {
+                GameObject g = Instantiate(pickup);
+                g.transform.position = parrent.position + parrent.forward * 0.5f;
+                // g.GetComponent<Pickup>().item = this;
+                return true;
+            }
+            return false;
+        }
+
+        public Item Copy()
         {
             Item it = CreateInstance<Item>();
-            it.id = i.id;
-            it.howMuchStack = i.howMuchStack;
-            it.itemIcon = i.itemIcon;
-            it.itemSize = i.itemSize;
-            it.itemType = i.itemType;
-            it.name = i.name;
-            it.pickup = i.pickup;
-            it.stack = i.stack;
+            it.id = id;
+            it.howMuchStack = howMuchStack;
+            it.itemIcon = itemIcon;
+            it.itemSize = itemSize;
+            it.itemType = itemType;
+            it.name = name;
+            it.pickup = pickup;
+            it.stack = stack;
 
             return it;
         }

@@ -128,32 +128,22 @@ namespace Inventory
         private void UpdateInventory()
         {
             ClearSlots();
-            int[,] _slots = inventory.GetSlots();
-            List<Item> items = inventory.GetItemsArray();
-            List<int> addedItems = new List<int>();
-            for (int i = 0; i < invSize.y; i++)
+
+            List<ItemsSlotData> isd = inventory.GetSlotsWithItems();
+
+            int slotid = 0;
+            foreach(ItemsSlotData isdd in isd)
             {
-                for (int j = 0; j < invSize.x; j++)
-                {
-                    if (_slots[j, i] >= items.Count)
-                    {
-                        Debug.LogError("Slot has wrong value.");
-                        continue;
-                    }
-                    slots[j, i].DebugSlot(_slots[j, i]);
-                    if (_slots[j, i] == -1)
-                        continue;
-                    if (addedItems.Contains(_slots[j, i]))
-                        continue;
-                    GameObject g = Instantiate(itemSketch, itemsParent);
-                    g.transform.localPosition = new Vector2(j, -i) * InventoryUIController.instance.gridSize;
-                    ItemUIDragable aiud = g.GetComponent<ItemUIDragable>();
-                    aiud.SetItem(items[_slots[j, i]], new Vector2Int(j, i), this);
-                    aiud.advancedInventoryUI = this;
-                    aiud.slot = _slots[j, i];
-                    this.items.Add(aiud);
-                    addedItems.Add(_slots[j, i]);
-                }
+                //if (items.Exists(t => t.item == isdd.item))
+                //    continue;
+                GameObject g = Instantiate(itemSketch, itemsParent);
+                g.transform.localPosition = new Vector2(isdd.position.x, -isdd.position.y) * InventoryUIController.instance.gridSize;
+                ItemUIDragable aiud = g.GetComponent<ItemUIDragable>();
+                aiud.SetItem(isdd.item, isdd.position, this);
+                aiud.advancedInventoryUI = this;
+                aiud.slot = slotid;
+                this.items.Add(aiud);
+                slotid++;
             }
             SimpleSlot[] ss = slotHolder.GetSlots();
             for (int i = 0; i < ss.Length; i++)

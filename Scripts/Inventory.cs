@@ -4,16 +4,8 @@ using UnityEngine;
 
 namespace Inventory
 {
-    public class ItemsSlotData
-    {
-        public Item item;
-        public Vector2Int position;
-    }
-
     public class Inventory : MonoBehaviour
     {
-        private const string ASSIGNED_ERROR = "Item couldn't be dropped because pickup variable isn't assigned.";
-
         [SerializeField] 
         private int xSize;
         [SerializeField] 
@@ -36,7 +28,6 @@ namespace Inventory
         public event Action OnInventoryChanged = delegate { };
 
         private List<ItemsSlotData> itemsSlots = new List<ItemsSlotData>();
-        private List<Item> items = new List<Item>();
 
         private void Awake()
         {
@@ -50,49 +41,39 @@ namespace Inventory
             {
                 return false;
             }
-            items.Add(Item.Copy(i));
-            ItemsSlotData isd = new ItemsSlotData();
-            isd.item = items[items.Count - 1];
-            isd.position = place;
-            itemsSlots.Add(isd);
 
-            OnInventoryChanged();
+            itemsSlots.Add(new ItemsSlotData(i, place));
+            OnInventoryChanged?.Invoke();
             return true;
         }
 
-        public bool CanMove(int idSlot, Vector2Int to)
+        public bool AddItemAtPosition(Item i, Vector2Int position)
         {
-            Vector2Int size = items[idSlot].itemSize;
-
-            return CheckSlot(GenerateList(idSlot), to, size);
-        }
-
-        public bool CanMove(Item i, Vector2Int to)
-        {
-            Vector2Int size = i.itemSize;
-
-            return CheckSlot(GenerateList(), to, size);
-        }
-
-        public bool Move(Inventory from, int idSlot, Vector2Int to)
-        {
-            if (CanMove(from.items[idSlot], to))
+            if(CanMove(i, position))
             {
-                AddItem(from.items[idSlot]);
-                from.RemoveItem(from.items[idSlot]);
-                Move(items.Count - 1, to);
-
+                itemsSlots.Add(new ItemsSlotData(i, position));
+                OnInventoryChanged?.Invoke();
                 return true;
             }
             return false;
         }
 
+        public bool CanMove(int idSlot, Vector2Int to)
+        {
+            return !IsOutsideOfInventory(itemsSlots[idSlot].item, to) && !CheckSlots(itemsSlots[idSlot].item, to);
+        }
+
+        public bool CanMove(Item i, Vector2Int to)
+        {
+            return !IsOutsideOfInventory(i, to) && !CheckSlots(i, to);
+        }
+
         public int GetItemCount(int itemId)
         {
             int count = 0;
-            foreach (Item i in items)
+            foreach (ItemsSlotData i in itemsSlots)
             {
-                if (i.id == itemId)
+                if (i.item.id == itemId)
                 {
                     count++;
                 }
@@ -102,67 +83,33 @@ namespace Inventory
 
         public int FindSlotId(Item i)
         {
-            return items.FindIndex(it => it == i);
+            return itemsSlots.FindIndex(it => it.item == i);
         }
 
-        public int[,] GetSlots()
+        public List<ItemsSlotData> GetSlotsWithItems()
         {
-            int[,] simpleSlots = new int[InventorySize.x, InventorySize.y];
-            for (int i = 0; i < InventorySize.x; i++)
-            {
-                for (int j = 0; j < InventorySize.y; j++)
-                {
-                    simpleSlots[i, j] = -1;
-                }
-            }
-            for (int i = 0; i < itemsSlots.Count; i++)
-            {
-                for (int j = itemsSlots[i].position.x; j < itemsSlots[i].item.itemSize.x + itemsSlots[i].position.x; j++)
-                {
-                    for (int k = itemsSlots[i].position.y; k < itemsSlots[i].item.itemSize.y + itemsSlots[i].position.y; k++)
-                    {
-                        simpleSlots[j, k] = i;
-                    }
-                }
-            }
-            return simpleSlots;
+            return itemsSlots;
         }
 
         public void ClearInventory()
         {
-            items.Clear();
             itemsSlots.Clear();
-
             OnInventoryChanged();
         }
 
         public void RemoveItem(Item item)
         {
-            int id = items.IndexOf(item);
-
-            items.RemoveAt(id);
-            itemsSlots.RemoveAt(id);
-            OnInventoryChanged();
-        }
-
-        public void RemoveItem(Item i, int ammout)
-        {
-            for (int j = 0; j < ammout; j++)
+            if(itemsSlots.RemoveAll(ctg => ctg.item == item) > 0)
             {
-                RemoveItem(i);
+                OnInventoryChanged();
             }
         }
 
         public void DropItem(Item item)
         {
-            if (item.pickup != null)
+            if(item.Drop(transform))
             {
-                GameObject g = Instantiate(item.pickup);
-                g.transform.position = transform.position + transform.forward * 0.5f;
-            }
-            else
-            {
-                Debug.LogWarning(ASSIGNED_ERROR);
+                RemoveItem(item);
             }
         }
 
@@ -173,6 +120,14 @@ namespace Inventory
                 ForceMove(idSlot, to);
             }
         }    
+
+        public void MoveToAnotherInventory(Inventory target, Item item, Vector2Int position)
+        {
+            if(target.AddItemAtPosition(item, position))
+            {
+                RemoveItem(item);
+            }
+        }
 
         /// <summary>
         /// "forceMove" doesn't check that there is empty space or no. It is just moving item from to. If you want use it be sure what you are doing.
@@ -187,61 +142,41 @@ namespace Inventory
             OnInventoryChanged();
         }
 
-        public List<Item> GetItemsArray()
+        private bool IsOutsideOfInventory(Item item, Vector2Int position)
         {
-            return items;
+            if (position.x < 0 || position.y < 0)
+                return true;
+            if (position.x + item.itemSize.x > xSize || position.y + item.itemSize.y > ySize)
+                return true;
+            return false;
         }
 
-        private bool[,] GenerateList(int exclude = -1)
-        {
-            bool[,] simpleSlots = new bool[InventorySize.x, InventorySize.y];
-            foreach (ItemsSlotData isd in itemsSlots)
-            {
-                for (int i = isd.position.x; i < isd.item.itemSize.x + isd.position.x; i++)
-                {
-                    for (int j = isd.position.y; j < isd.item.itemSize.y + isd.position.y; j++)
-                    {
-                        if (exclude != -1 && isd == itemsSlots[exclude])
-                        {
-                            continue;
-                        }
-                        simpleSlots[i, j] = true;
-                    }
-                }
-            }
-            return simpleSlots;
-        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="position"></param>
+        /// <returns> true if inside</returns>
 
-        private bool CheckSlot(bool[,] simpleSlots, Vector2Int pos, Vector2Int size)
+        private bool CheckSlots(Item item, Vector2Int position)
         {
-            if (pos.x + size.x - 1 >= InventorySize.x || pos.y + size.y - 1 >= InventorySize.y)
-                return false;
-            if (pos.x < 0 || pos.y < 0)
-                return false;
-            for (int i = 0; i < size.x; i++)
+            foreach(ItemsSlotData isd in itemsSlots)
             {
-                for (int j = 0; j < size.y; j++)
-                {
-                    if (simpleSlots[i + pos.x, j + pos.y])
-                        return false;
-                }
+                if (isd.IsInside(item, position))
+                    return true;
             }
-            return true;
+            return false;
         }
 
         private Vector2Int FindEmptyPlace(Item item)
         {
-            bool[,] simpleSlots = GenerateList();
             for (int i = 0; i < InventorySize.y; i++)
             {
                 for (int j = 0; j < InventorySize.x; j++)
                 {
-                    if (!simpleSlots[j, i])
+                    if (!IsOutsideOfInventory(item, new Vector2Int(j,i)) && !CheckSlots(item, new Vector2Int(j, i)))
                     {
-                        if (CheckSlot(simpleSlots, new Vector2Int(j, i), item.itemSize))
-                        {
-                            return new Vector2Int(j, i);
-                        }
+                        return new Vector2Int(j, i);
                     }
                 }
             }

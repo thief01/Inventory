@@ -16,7 +16,7 @@ namespace Inventory
             {
                 return false;
             }
-            bool t = slots[slotID].SetItem(Instantiate(Item.Copy(item)));
+            bool t = slots[slotID].SetItem(item.Copy());
 
             OnSlotsChange();
             return t;
@@ -54,7 +54,7 @@ namespace Inventory
             }
             if (to.AddItem(slots[slotID].HoldingItem))
             {
-                to.Move(to.GetItemsArray().Count - 1, position);
+                to.Move(to.GetSlotsWithItems().Count - 1, position);
                 RemoveFromSlot(slotID);
                 OnSlotsChange();
             }

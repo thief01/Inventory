@@ -25,8 +25,7 @@ namespace Inventory
         public InventoryUI advancedInventoryUI { get; set; }
         public Vector2Int position { get; set; }
         public AdvancedItemSlotUIType advancedItemSlotUIType { get; set; }
-        [SerializeField] 
-        private TextMeshProUGUI tm;
+
         [SerializeField]
         private Image statusDisplayer;
         [SerializeField]
@@ -35,11 +34,6 @@ namespace Inventory
         public void SetGridSize(Vector2Int grid)
         {
             statusDisplayer.rectTransform.sizeDelta = grid;
-        }
-
-        public void DebugSlot(int i)
-        {
-            tm.text = i.ToString();
         }
 
         public void setStatus(DisplayerStatus ds)

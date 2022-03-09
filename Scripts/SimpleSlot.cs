@@ -2,7 +2,7 @@
 namespace Inventory
 {
     [System.Serializable]
-    public struct SimpleSlot
+    public class SimpleSlot
     {
         public Item HoldingItem;
         public ItemType SlotType;

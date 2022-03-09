@@ -52,7 +52,7 @@ namespace Inventory
                 if (target == draggedFrom)
                     draggedFrom.inventory.Move(draggingItem.slot, position - offset);
                 else
-                    target.inventory.Move(draggedFrom.inventory, draggedFrom.inventory.FindSlotId(draggingItem.item), position - offset);
+                    draggedFrom.inventory.MoveToAnotherInventory(target.inventory, draggingItem.item, position - offset);
                 draggedFrom.ResetItems();
                 target.ResetItems();
 
