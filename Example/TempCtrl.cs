@@ -1,11 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Inventory;
 
 public class TempCtrl : MonoBehaviour
 {
     public int id;
     [SerializeField] Item[] tempItems;
+    [SerializeField] Inventory.Inventory inventory;
+
+    [SerializeField]
+    Inventory.Inventory player;
+    [SerializeField]
+    Inventory.Inventory enemy;
+    [SerializeField]
+    SlotHolder playerS;
+    [SerializeField]
+    SlotHolder enemyS;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +37,20 @@ public class TempCtrl : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            AdvancedInventory.instance.addItem(tempItems[id]);
+            inventory.AddItem(tempItems[id]);
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (InventoryUIController.instance.inventoryStatus)
+            {
+                InventoryUIController.instance.Close();
+            }
+            else
+            {
+                //AdvancedInvetoryUIController.instance.openPlayerInvetory(player, playerS);
+                InventoryUIController.instance.OpenInvetories(player, playerS, enemy, enemyS, 0);
+            }
         }
     }
 }

@@ -22,16 +22,16 @@ namespace Inventory
         public bool inventoryStatus = false;
         private int openedInventory = -1;
 
-        public void openPlayerInvetory(Inventory playerInventory, SlotHolder sh)
+        public void OpenPlayerInvetory(Inventory playerInventory, SlotHolder sh)
         {
             inventoryStatus = true;
             this.playerInventory.gameObject.SetActive(true);
             this.playerInventory.Open(playerInventory, sh);
         }
 
-        public void openInvetories(Inventory playerInventory, SlotHolder sh, Inventory otherInventory, SlotHolder sh2, int inventoryID)
+        public void OpenInvetories(Inventory playerInventory, SlotHolder sh, Inventory otherInventory, SlotHolder sh2, int inventoryID)
         {
-            openPlayerInvetory(playerInventory, sh);
+            OpenPlayerInvetory(playerInventory, sh);
             if (inventoryID >= inventories.Length)
                 return;
             inventories[inventoryID].gameObject.SetActive(true);

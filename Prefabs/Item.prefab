@@ -62,6 +62,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.49803922}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -88,12 +89,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6c0e14a5724a994e938ca71610ffc02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cg: {fileID: -3163597086254066951}
-  t_d: {r: 1, g: 0, b: 0, a: 0.24705882}
-  t_d2: {r: 0.6320754, g: 0, b: 0, a: 0.69411767}
+  defaultColor: {r: 0, g: 0, b: 0, a: 0.58431375}
+  colorWhileDragging: {r: 0, g: 0, b: 0, a: 0.5372549}
   itemSprite: {fileID: 8557769207641291411}
-  item: {fileID: 0}
-  position: {x: 0, y: 0}
 --- !u!225 &-3163597086254066951
 CanvasGroup:
   m_ObjectHideFlags: 0

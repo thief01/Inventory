@@ -14,7 +14,7 @@ namespace Inventory
     {
         private const string ASSIGNED_ERROR = "Item couldn't be dropped because pickup variable isn't assigned.";
 
-        [SerializeField ] 
+        [SerializeField] 
         private int xSize;
         [SerializeField] 
         private int ySize;

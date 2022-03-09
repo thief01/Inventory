@@ -28,6 +28,11 @@ namespace Inventory
         private Image itemSprite;
         private Canvas c;
 
+        private void Awake()
+        {
+            cg = GetComponent<CanvasGroup>();
+        }
+
         public void OnBeginDrag(PointerEventData eventData)
         {
             cg.blocksRaycasts = false;
