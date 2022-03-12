@@ -19,7 +19,7 @@ namespace Inventory
 
         public bool IsPossibleToSet(Item i)
         {
-            return SlotType == i.itemType && HoldingItem == null;
+            return (SlotType == i.itemType || SlotType == ItemType.any) && HoldingItem == null;
         }
 
         public void RemoveItem()

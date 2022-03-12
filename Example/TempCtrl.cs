@@ -42,14 +42,14 @@ public class TempCtrl : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            if (InventoryUIController.instance.inventoryStatus)
+            if (UIInventoryController.instance.inventoryStatus)
             {
-                InventoryUIController.instance.Close();
+                UIInventoryController.instance.Close();
             }
             else
             {
                 //AdvancedInvetoryUIController.instance.openPlayerInvetory(player, playerS);
-                InventoryUIController.instance.OpenInvetories(player, playerS, enemy, enemyS, 0);
+                UIInventoryController.instance.OpenInvetories(player, enemy, 0);
             }
         }
     }

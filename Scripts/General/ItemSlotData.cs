@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace Inventory
 {
-    public class ItemsSlotData
+    public class ItemSlotData
     {
-        public Item item;
-        public Vector2Int position;
+        public Item Item { get; set; }
+        public Vector2Int Position { get; set; }
 
-        public ItemsSlotData() { }
+        public ItemSlotData() { }
 
-        public ItemsSlotData(Item i, Vector2Int p)
+        public ItemSlotData(Item i, Vector2Int p)
         {
-            item = i.Copy();
-            position = p;
+            Item = i.Copy();
+            Position = p;
         }
         /// <summary>
         /// 
@@ -24,11 +24,11 @@ namespace Inventory
         /// <returns></returns>
         public bool IsInside(Item newItem, Vector2Int position)
         {
-            if (newItem == item)
+            if (newItem == Item)
                 return false;
             // left top, right top, left down, right down
             Vector2Int[] allCorners = GetAllCorners(position, newItem.itemSize);
-            Vector2Int[] squareCorners = GetCorners(this.position, item.itemSize);
+            Vector2Int[] squareCorners = GetCorners(this.Position, Item.itemSize);
 
             foreach (Vector2Int point in allCorners)
             {
@@ -44,6 +44,7 @@ namespace Inventory
         {
             return point.x >= corners[0].x && point.x <= corners[1].x && point.y >= corners[0].y && point.y <= corners[1].y;
         }
+
 
         /// <summary>
         /// convert position + size to square

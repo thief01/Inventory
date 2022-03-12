@@ -8,7 +8,7 @@ namespace Inventory
     /// </summary>
     public enum ItemType
     {
-        nothing,
+        any,
         meeleeWeapon4x2,
         notMeleWeapon4x2,
         something

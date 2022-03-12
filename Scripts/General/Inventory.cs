@@ -6,14 +6,12 @@ namespace Inventory
 {
     public class Inventory : MonoBehaviour
     {
-        [SerializeField] 
-        private int xSize;
-        [SerializeField] 
-        private int ySize;
+        public SlotHolder SlotHolder { get => slotHolder; }
+        public event Action OnInventoryChanged = delegate { };
 
         public Vector2Int InventorySize
         {
-            get 
+            get
             {
                 return new Vector2Int(xSize, ySize);
             }
@@ -25,9 +23,15 @@ namespace Inventory
             }
         }
 
-        public event Action OnInventoryChanged = delegate { };
+        [SerializeField] 
+        private int xSize;
+        [SerializeField] 
+        private int ySize;
 
-        private List<ItemsSlotData> itemsSlots = new List<ItemsSlotData>();
+        [SerializeField]
+        private SlotHolder slotHolder;
+
+        private List<ItemSlotData> itemsSlots = new List<ItemSlotData>();
 
         private void Awake()
         {
@@ -42,28 +46,23 @@ namespace Inventory
                 return false;
             }
 
-            itemsSlots.Add(new ItemsSlotData(i, place));
+            itemsSlots.Add(new ItemSlotData(i, place));
             OnInventoryChanged?.Invoke();
             return true;
         }
 
         public bool AddItemAtPosition(Item i, Vector2Int position)
         {
-            if(CanMove(i, position))
+            if(CanSetAtPosition(i, position))
             {
-                itemsSlots.Add(new ItemsSlotData(i, position));
+                itemsSlots.Add(new ItemSlotData(i, position));
                 OnInventoryChanged?.Invoke();
                 return true;
             }
             return false;
         }
 
-        public bool CanMove(int idSlot, Vector2Int to)
-        {
-            return !IsOutsideOfInventory(itemsSlots[idSlot].item, to) && !CheckSlots(itemsSlots[idSlot].item, to);
-        }
-
-        public bool CanMove(Item i, Vector2Int to)
+        public bool CanSetAtPosition(Item i, Vector2Int to)
         {
             return !IsOutsideOfInventory(i, to) && !CheckSlots(i, to);
         }
@@ -71,9 +70,9 @@ namespace Inventory
         public int GetItemCount(int itemId)
         {
             int count = 0;
-            foreach (ItemsSlotData i in itemsSlots)
+            foreach (ItemSlotData i in itemsSlots)
             {
-                if (i.item.id == itemId)
+                if (i.Item.id == itemId)
                 {
                     count++;
                 }
@@ -83,10 +82,10 @@ namespace Inventory
 
         public int FindSlotId(Item i)
         {
-            return itemsSlots.FindIndex(it => it.item == i);
+            return itemsSlots.FindIndex(it => it.Item == i);
         }
 
-        public List<ItemsSlotData> GetSlotsWithItems()
+        public List<ItemSlotData> GetSlotsWithItems()
         {
             return itemsSlots;
         }
@@ -99,7 +98,7 @@ namespace Inventory
 
         public void RemoveItem(Item item)
         {
-            if(itemsSlots.RemoveAll(ctg => ctg.item == item) > 0)
+            if(itemsSlots.RemoveAll(ctg => ctg.Item == item) > 0)
             {
                 OnInventoryChanged();
             }
@@ -113,17 +112,43 @@ namespace Inventory
             }
         }
 
-        public void Move(int idSlot, Vector2Int to)
-        {
-            if (CanMove(idSlot, to))
-            {
-                ForceMove(idSlot, to);
-            }
-        }    
+        /// <summary>
+        /// Move item to new position in this inventory
+        /// </summary>
+        /// <param name="item">Item from this inventory</param>
+        /// <param name="to">New position of item</param>
 
+        public void Move(Item item, Vector2Int to)
+        {
+            if(CanSetAtPosition(item, to))
+            {
+                ForceMove(item, to);
+                OnInventoryChanged?.Invoke();
+            }
+        }
+
+        /// <summary>
+        /// Move item from this inventory to another inventory
+        /// </summary>
+        /// <param name="target"> move to target inventory</param>
+        /// <param name="item"> item from this inventory</param>
+        /// <param name="position"> position in new inventory</param>
         public void MoveToAnotherInventory(Inventory target, Item item, Vector2Int position)
         {
             if(target.AddItemAtPosition(item, position))
+            {
+                RemoveItem(item);
+            }
+        }
+
+        /// <summary>
+        /// Move item from this inventory to Armable slot
+        /// </summary>
+        /// <param name="simpleSlot">Armable slot target</param>
+        /// <param name="item">Item from this inventory</param>
+        public void MoveToArmableSlot(SimpleSlot simpleSlot, Item item)
+        {
+            if(simpleSlot.SetItem(item))
             {
                 RemoveItem(item);
             }
@@ -138,8 +163,13 @@ namespace Inventory
 
         public void ForceMove(int idSlot, Vector2Int to)
         {
-            itemsSlots[idSlot].position = to;
+            itemsSlots[idSlot].Position = to;
             OnInventoryChanged();
+        }
+
+        public void ForceMove(Item item, Vector2Int to)
+        {
+            itemsSlots.Find(ctg => ctg.Item == item).Position = to;
         }
 
         private bool IsOutsideOfInventory(Item item, Vector2Int position)
@@ -160,7 +190,7 @@ namespace Inventory
 
         private bool CheckSlots(Item item, Vector2Int position)
         {
-            foreach(ItemsSlotData isd in itemsSlots)
+            foreach(ItemSlotData isd in itemsSlots)
             {
                 if (isd.IsInside(item, position))
                     return true;

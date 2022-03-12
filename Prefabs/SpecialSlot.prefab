@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -85,7 +86,7 @@ GameObject:
   - component: {fileID: 5899640509152378490}
   - component: {fileID: 5899640509152378487}
   - component: {fileID: 5899640509152378488}
-  - component: {fileID: 5899640509152378489}
+  - component: {fileID: -4914163835630634967}
   m_Layer: 5
   m_Name: SpecialSlot
   m_TagString: Untagged
@@ -137,6 +138,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.22745098}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -151,7 +153,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5899640509152378489
+--- !u!114 &-4914163835630634967
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,14 +162,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5899640509152378491}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d0cf1995cb27804daa1936cf79a37a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a2ef85385f6acc4a8c0fabcf8b449ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  advancedSlotID: -1
-  advancedInventoryUI: {fileID: 0}
-  position: {x: 0, y: 0}
-  advancedItemSlotUIType: 1
-  tm: {fileID: 0}
   statusDisplayer: {fileID: 5899640508850966605}
   slotIcon: {fileID: 5899640509540865950}
 --- !u!1 &5899640509540865952
@@ -230,6 +227,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

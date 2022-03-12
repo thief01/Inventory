@@ -2,11 +2,11 @@
 
 namespace Inventory
 {
-    public class InventoryUIController : MonoBehaviour
+    public class UIInventoryController : MonoBehaviour
     {
         #region Singleton
 
-        public static InventoryUIController instance;
+        public static UIInventoryController instance;
 
         private void Awake()
         {
@@ -16,26 +16,39 @@ namespace Inventory
 
         #endregion
 
-        public Vector2Int gridSize;
-        public InventoryUI playerInventory;
-        public InventoryUI[] inventories;
+        [System.Serializable]
+        public struct PredefineElements
+        {
+            [Tooltip("Generated element, slot which is able to holding item.")]
+            public GameObject generatedSlot;
+            [Tooltip("Generated element, item which represent specify item form inventory")]
+            public GameObject itemSketch;
+
+            public Vector2Int gridSize;
+        }
+        public PredefineElements predefineElements;
+
+        //[SerializeField]
+        //private InventoryUI inventories;
+        public UIInventory playerInventory;
+        public UIInventory[] inventories;
         public bool inventoryStatus = false;
         private int openedInventory = -1;
 
-        public void OpenPlayerInvetory(Inventory playerInventory, SlotHolder sh)
+        public void OpenPlayerInvetory(Inventory playerInventory)
         {
             inventoryStatus = true;
             this.playerInventory.gameObject.SetActive(true);
-            this.playerInventory.Open(playerInventory, sh);
+            this.playerInventory.Open(playerInventory);
         }
 
-        public void OpenInvetories(Inventory playerInventory, SlotHolder sh, Inventory otherInventory, SlotHolder sh2, int inventoryID)
+        public void OpenInvetories(Inventory playerInventory, Inventory otherInventory, int inventoryID)
         {
-            OpenPlayerInvetory(playerInventory, sh);
+            OpenPlayerInvetory(playerInventory);
             if (inventoryID >= inventories.Length)
                 return;
             inventories[inventoryID].gameObject.SetActive(true);
-            inventories[inventoryID].Open(otherInventory, sh2);
+            inventories[inventoryID].Open(otherInventory);
             openedInventory = inventoryID;
         }
 
