@@ -18,6 +18,7 @@ namespace Inventory
         armableSlot
     }
 
+    
     public class UIItemSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
         protected readonly Color[] COLORS_FOR_STATUSES = { new Color(0, 255, 0, 120), new Color(255, 0, 0, 120), new Color(0, 0, 0, 0) };
@@ -27,7 +28,7 @@ namespace Inventory
 
         [SerializeField]
         protected Image statusDisplayer;
-
+        
         private void Awake()
         {
             UIItemSlotType = AdvancedItemSlotUIType.invetorySpace;
